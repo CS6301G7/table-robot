@@ -15,17 +15,17 @@
     <include>
       <uri>model://plate</uri>   
       <name>plate</name>
-      <pose>0.80 0.3 0.70 0 0 0</pose>  
+      <pose>0.70 0.3 0.70 0 0 0</pose>  
     </include>
     <include>
       <uri>model://bowl</uri>
       <name>bowl</name>
-      <pose>0.80 0.3 0.72 0 0 0</pose>  
+      <pose>0.70 0.3 0.72 0 0 0</pose>  
     </include>
     <include>
       <uri>model://cup</uri>
       <name>cup</name>
-      <pose>1.3 0.3 0.70 0 0 0</pose>  
+      <pose>0.70 -0.25 0.70 0 0 0</pose>  
     </include>
     <include>
       <uri>model://spoon</uri>
