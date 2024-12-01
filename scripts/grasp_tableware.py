@@ -322,12 +322,8 @@ if __name__ == "__main__":
 
     # Ending Poses
     trans_mug_final = [0.75, -0.21, 0.80]
-    trans_bowl_middle = [0.65, -0.35, 0.80]
-    trans_bowl_final = [0.75, 0.25, 0.80]
-    trans_plate_final = [0.7, 0, 0.75]
-    trans_knife_final = [0.83, -0.2, 0.70]
-    trans_spoon_final = [0.8, -0.2, 0.70]
-    trans_fork_final = [0.8, 0.45, 0.70]
+    trans_bowl_final = [0.86, 0.06, 1]
+    trans_plate_final = [0.53, 0.05, 0.85]
         
     # Create a node
     rospy.init_node("fetch_grasping")
@@ -356,20 +352,15 @@ if __name__ == "__main__":
     trans_mug = RT_obj_mug[:3, 3]
     print('Mug: ', RT_obj_mug[:3, 3]);
 
-    # get fork pose
-    RT_obj_fork = get_pose_gazebo(model_name=fork_name)
-    trans_fork = RT_obj_fork[:3, 3]
-    print('Fork: ', trans_fork);
+    # get bowl pose
+    RT_obj_bowl = get_pose_gazebo(model_name=bowl_name)
+    trans_bowl = RT_obj_bowl[:3, 3]
+    print('Bowl: ', trans_bowl);
 
     # get plate pose
     RT_obj_plate = get_pose_gazebo(model_name=plate_name)
     trans_plate = RT_obj_plate[:3, 3]
     print('Plate: ', trans_plate);
-
-    # get bowl pose
-    RT_obj_bowl = get_pose_gazebo(model_name=bowl_name)
-    trans_bowl = RT_obj_bowl[:3, 3]
-    print('Bowl: ', trans_bowl);
     
     # # sleep before adding objects
     # # dimension of each default(1,1,1) box is 1x1x1m
@@ -379,9 +370,9 @@ if __name__ == "__main__":
     rospy.sleep(1.0)
     p = PoseStamped()
     p.header.frame_id = robot.get_planning_frame()
-    p.pose.position.x = 0.9
+    p.pose.position.x = 1.045
     p.pose.position.y = 0
-    p.pose.position.z = trans_mug[2] - 0.5 #- 0.1
+    p.pose.position.z = trans_mug[2] - 0.45 #- 0.1
     scene.add_box("table", p, (1, 5, 1))
     
     # add a box for robot base
@@ -422,12 +413,6 @@ if __name__ == "__main__":
     plate_filename = 'ideal_grips/fetch_gripper-Threshold_Bistro_Ceramic_Dinner_Plate_Ruby_Ring.json'
     RT_grasps_plate = parse_grasps(plate_filename)
 
-    #Fork
-
-    #Spoon
-
-    #Knife
-    
     #######################################################################################
     #Move Mug
     print("Begin Moving Mug")
@@ -470,82 +455,7 @@ if __name__ == "__main__":
     scene.add_mesh(mug_name, p, 'data/' + mug_name + '.obj')
 
     #######################################################################################
-    #Move Bowl to intermediate position
-    print("Begin Moving Bowl to intemediate position")
-
-    # current gripper pose
-    RT_gripper = get_pose_gazebo(model_name='fetch', relative_entity_name='wrist_roll_link')        
-    
-    # sort grasps according to distances to gripper
-    # RT_grasps_base contains all the grasps in the robot base frame
-    RT_grasps_base, grasp_index = sort_grasps(RT_obj_bowl, RT_gripper, RT_grasps_bowl)
-        
-    # grasp planning
-    RT_grasp, grasp_num = plan_grasp(group, RT_grasps_base, grasp_index)
-        
-    # grasp object
-    grasp(gripper, group, scene, bowl_name, RT_grasp)
-
-    # move bowl out of the way of the plate
-    print("Moving bowl to intermediate position")
-    quat, trans = rt_to_ros_qt(RT_grasp)
-    plan = plan_to_pose(group, quat, trans_bowl_middle)
-    trajectory = plan[1]
-    if not plan[0]:
-        print('no plan found')
-
-    input('execute?')
-    group.execute(trajectory, wait=True)
-    group.stop()
-    group.clear_pose_targets()
-    
-    input("Open Gripper??")
-    gripper.open()
-
-    #######################################################################################
-    #Move Plate
-    print("Begin Moving Plate")
-
-    # current gripper pose
-    RT_gripper = get_pose_gazebo(model_name='fetch', relative_entity_name='wrist_roll_link')        
-    
-    # sort grasps according to distances to gripper
-    # RT_grasps_base contains all the grasps in the robot base frame
-    RT_grasps_base, grasp_index = sort_grasps(RT_obj_bowl, RT_gripper, RT_grasps_plate)
-        
-    # grasp planning
-    RT_grasp, grasp_num = plan_grasp(group, RT_grasps_base, grasp_index)
-        
-    # grasp object
-    grasp(gripper, group, scene, plate_name, RT_grasp)
-
-    # move plate to final position
-    print("Moving plate to final position")
-    quat, trans = rt_to_ros_qt(RT_grasp)
-    plan = plan_to_pose(group, quat, trans_plate)
-    trajectory = plan[1]
-    if not plan[0]:
-        print('no plan found')
-
-    input('execute?')
-    group.execute(trajectory, wait=True)
-    group.stop()
-    group.clear_pose_targets()
-    
-    input("Open Gripper??")
-    gripper.open()
-
-    # add the plate back in
-    RT_obj_plate = get_pose_gazebo(model_name=plate_name)
-    trans_plate = RT_obj_plate[:3, 3]
-    print('Plate New: ', trans_plate);
-    p.pose.position.x = trans_plate[0]
-    p.pose.position.y = trans_plate[1]
-    p.pose.position.z = trans_plate[2]
-    scene.add_mesh(plate_name, p, 'data/' + plate_name + '.obj')
-
-    #######################################################################################
-    #Move Bowl to final position
+    #Move Bowl to Final position
     print("Begin Moving Bowl to final position")
 
     # current gripper pose
@@ -561,7 +471,7 @@ if __name__ == "__main__":
     # grasp object
     grasp(gripper, group, scene, bowl_name, RT_grasp)
 
-    # move bowl
+    # move bowl to final position
     print("Moving bowl to final position")
     quat, trans = rt_to_ros_qt(RT_grasp)
     plan = plan_to_pose(group, quat, trans_bowl_final)
@@ -577,4 +487,46 @@ if __name__ == "__main__":
     input("Open Gripper??")
     gripper.open()
 
+    # Add bowl back in
+    RT_obj_bowl = get_pose_gazebo(model_name=bowl_name)
+    trans_bowl = RT_obj_bowl[:3, 3]
+    print('Bowl new: ', trans_bowl);
+    p.pose.position.x = trans_bowl[0]
+    p.pose.position.y = trans_bowl[1]
+    p.pose.position.z = trans_bowl[2]
+    scene.add_mesh(bowl_name, p, 'data/' + bowl_name + '.obj')
+
+    
+    #######################################################################################
+    #Move Plate
+    print("Begin Moving Plate")
+
+    # current gripper pose
+    RT_gripper = get_pose_gazebo(model_name='fetch', relative_entity_name='wrist_roll_link')        
+    
+    # sort grasps according to distances to gripper
+    # RT_grasps_base contains all the grasps in the robot base frame
+    RT_grasps_base, grasp_index = sort_grasps(RT_obj_plate, RT_gripper, RT_grasps_plate)
+        
+    # grasp planning
+    RT_grasp, grasp_num = plan_grasp(group, RT_grasps_base, grasp_index)
+    
+    # grasp object
+    grasp(gripper, group, scene, plate_name, RT_grasp)
+
+    # move plate to final position
+    print("Moving plate to final position")
+    quat, trans = rt_to_ros_qt(RT_grasp)
+    plan = plan_to_pose(group, quat, trans_plate_final)
+    trajectory = plan[1]
+    if not plan[0]:
+        print('no plan found')
+
+    input('execute?')
+    group.execute(trajectory, wait=True)
+    group.stop()
+    group.clear_pose_targets()
+    
+    input("Open Gripper??")
+    gripper.open()
     
