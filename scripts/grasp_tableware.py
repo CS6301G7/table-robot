@@ -170,9 +170,6 @@ def plan_grasp(group, RT_grasps_base, grasp_index):
 
 # first plan to the standoff pose, then move the the grasping pose
 def grasp(gripper, group, scene, object_name, RT_grasp):
-    gripper.open()
-    # remove the target from the planning scene for grasping
-    scene.remove_world_object(object_name)
     
     reach_tail_len = 10
     standoff_dist = 0.10
@@ -207,7 +204,8 @@ def grasp(gripper, group, scene, object_name, RT_grasp):
     group.stop()
     group.clear_pose_targets()
     
-    
+    # remove the target from the planning scene for grasping
+    scene.remove_world_object(object_name)
     
     waypoints = []
     wpose = group.get_current_pose().pose
