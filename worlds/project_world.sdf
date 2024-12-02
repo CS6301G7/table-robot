@@ -27,10 +27,5 @@
       <name>cup</name>
       <pose>0.7 -0.25 0.70 0 0 0</pose>  
     </include>
-    <include>
-      <uri>model://fork</uri>
-      <name>fork</name>
-      <pose>0.75 -0.4 0.725 0 0 3.141591</pose>  
-    </include>
   </world>
 </sdf>
