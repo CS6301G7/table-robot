@@ -1,22 +1,29 @@
 import numpy as np
 import json
-from ros_utils import ros_qt_to_rt
+from ros_utils import ros_qt_to_rt, ros_quat
 
 
 def parse_grasps(filename):
 
     with open(filename, 'r') as f:
         data = json.load(f)
-    grasps = data['grasps']
-    
-    n = len(grasps)
+    pose = data['pose']
+    fall_time = data['fall_time']
+    n = 0
+    for i in range(len(pose)):
+        if(fall_time[i] >3):
+            n+=1
+    print("Strong poses: ", n);
+    print('total poses: ', len(pose))
+    pose_count = 0
     poses_grasp = np.zeros((n, 4, 4), dtype=np.float32)
-    for i in range(n):
-        pose = grasps[i]['pose']
-        rot = pose[3:]
-        trans = pose[:3]
-        RT = ros_qt_to_rt(rot, trans)
-        poses_grasp[i, :, :] = RT
+    for i in range(len(pose)):
+        if(fall_time[i] >3):
+            rot = ros_quat(pose[i][3:])
+            trans = pose[i][:3]
+            RT = ros_qt_to_rt(rot, trans)
+            poses_grasp[pose_count, :, :] = RT
+            pose_count+=1
     return poses_grasp
     
     
@@ -51,6 +58,7 @@ if __name__ == "__main__":
     Main function to run the code
     """
     
-    filename = 'refined_003_cracker_box_google_16k_textured_scale_1000-fetch_gripper.json'
+    filename = 'fetch_gripper-Threshold_Porcelain_Coffee_Mug_All_Over_Bead_White.json'
     poses_grasp = parse_grasps(filename)
     print(poses_grasp)
+

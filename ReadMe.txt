@@ -8,9 +8,8 @@ Getting started
 
 Launching Gazebo + MoveIt
  - "cd table-robot/launch", then run "roslaunch project_grasp.launch"
- - Launch moveit with "fetch_moveit_config move_group.launch"
+ - Launch moveit with "roslaunch fetch_moveit_config move_group.launch"
 
 Running the code
  - "cd table-robot/scripts"
  - python grasp_tableware.py
- 
