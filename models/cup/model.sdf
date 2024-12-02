@@ -17,6 +17,9 @@ to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
           </mesh>
         </geometry>
       </visual>
+      <inertial>
+        <mass>0.1</mass>
+      </inertial>
       <collision name="collision_0">
         <geometry>
           <mesh>

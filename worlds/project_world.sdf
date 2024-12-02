@@ -1,36 +1,46 @@
 <?xml version="1.0" ?>
 <sdf version="1.4">
-  <world name="default">
-    <include>
-      <uri>model://ground_plane</uri>
-    </include>
-    <include>
-      <uri>model://sun</uri>
-    </include>
-    <include>
-      <uri>model://cafe_table</uri>
-      <name>table1</name>
-      <pose>1.0 0 -0.08 0 0 0</pose>
-    </include>
-    <include>
-      <uri>model://plate</uri>   
-      <name>plate</name>
-      <pose>0.6 0.3 0.70 0 0 0</pose>  
-    </include>
-    <include>
-      <uri>model://bowl</uri>
-      <name>bowl</name>
-      <pose>0.6 0.3 0.72 0 0 0</pose>  
-    </include>
-    <include>
-      <uri>model://cup</uri>
-      <name>cup</name>
-      <pose>0.7 -0.25 0.70 0 0 0</pose>  
-    </include>
-    <include>
-      <uri>model://fork</uri>
-      <name>fork</name>
-      <pose>0.75 -0.4 0.725 0 0 3.141591</pose>  
-    </include>
-  </world>
+	<world name="default">
+		<include>
+			<uri>model://ground_plane</uri>
+		</include>
+		<include>
+			<uri>model://sun</uri>
+		</include>
+		<include>
+			<uri>model://cafe_table</uri>
+			<name>table1</name>
+			<pose>1.0 0 -0.08 0 0 0</pose>
+		</include>
+		<include>
+			<uri>model://plate</uri>
+			<name>plate</name>
+			<pose>0.70 0.25 0.70 0 0 0</pose>
+		</include>
+		<include>
+			<uri>model://bowl</uri>
+			<name>bowl</name>
+			<pose>0.70 0.25 0.72 0 0 0</pose>
+		</include>
+		<include>
+			<uri>model://cup</uri>
+			<name>cup</name>
+			<pose>0.92 0.25 0.70 0 0 0</pose>
+		</include>
+		<include>
+			<uri>model://spoon</uri>
+			<name>spoon</name>
+			<pose>1 -0.09 0.70 0 0 1.5708</pose>
+		</include>
+		<include>
+			<uri>model://fork</uri>
+			<name>fork</name>
+			<pose>0.83 0.08 0.70 0 0 -1.5708</pose>
+		</include>
+		<include>
+			<uri>model://knife</uri>
+			<name>knife</name>
+			<pose>0.91 -0.13 0.70 0 0 0</pose>
+		</include>
+	</world>
 </sdf>
